@@ -1,0 +1,18 @@
+{
+  "timestamp": 1772860766704,
+  "frame_id": 335,
+  "reason": "low_conf_0.419",
+  "detections": [
+    {
+      "bbox": [
+        783,
+        495,
+        135,
+        294
+      ],
+      "conf": 0.4190558195114136,
+      "cls": 0,
+      "label": "CT"
+    }
+  ]
+}

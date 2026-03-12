@@ -1,0 +1,28 @@
+source:
+  type: screen
+  camera_index: 0
+  monitor_index: 1
+  video_path: C:/Users/omarn/Videos/2026-02-21 01-49-57.mp4
+detection:
+  history: 500
+  var_threshold: 25
+  min_area: 5000
+  blur_size: 21
+  erode_iterations: 1
+  dilate_iterations: 3
+tracker:
+  max_disappeared: 30
+performance:
+  target_fps: 100
+  resize_width: 640
+  keep_video_native_resolution: true
+yolo:
+  model_path: yolov8n.pt
+  conf_threshold: 0.35
+  iou_threshold: 0.45
+  device: ''
+cs2:
+  hud_top: 0.0
+  hud_bottom: 0.0
+  min_box_h: 20
+  max_box_h: 600

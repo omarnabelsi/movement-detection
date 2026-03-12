@@ -1,0 +1,10 @@
+path: C:\Users\omarn\OneDrive\Desktop\mouce\data\cs2_dataset
+train: train/images
+val: valid/images
+test: test/images
+nc: 4
+names:
+- CT
+- CT_heat
+- T
+- T_heat
