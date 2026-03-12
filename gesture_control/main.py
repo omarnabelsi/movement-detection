@@ -1,10 +1,11 @@
 """Hand Gesture Computer Control — main entry point.
 
 Modes:
-    python main.py                                     → real-time gesture control
-    python main.py --record                            → open dataset recorder
-    python main.py --from-images --images-root PATH    → extract landmarks from image dataset
-    python main.py --train                             → train the gesture classifier
+    python main.py                                          → real-time gesture control
+    python main.py --record                                 → open the dataset recorder
+    python main.py --from-images --images-root PATH         → extract landmarks from image dataset
+    python main.py --from-hagrid-json --json-dir PATH       → extract landmarks from HaGRID JSONs
+    python main.py --train                                  → train the gesture classifier
 
 Press ESC to exit any mode cleanly.
 """
@@ -106,9 +107,13 @@ def main():
                        help="Train the gesture classifier")
     group.add_argument("--from-images", action="store_true",
                        help="Extract landmarks from a HaGRID image dataset")
+    group.add_argument("--from-hagrid-json", action="store_true",
+                       help="Extract landmarks from HaGRID annotation JSON files (no images needed)")
     parser.add_argument("--images-root", default=None,
                         help="HaGRID root folder (required with --from-images)")
-    parser.add_argument("--max-per-class", type=int, default=400,
+    parser.add_argument("--json-dir", default=None,
+                        help="Folder with downloaded HaGRID JSON files (required with --from-hagrid-json)")
+    parser.add_argument("--max-per-class", type=int, default=500,
                         help="Max images per gesture class when using --from-images (default 400)")
     parser.add_argument("--epochs", type=int, default=60,
                         help="Training epochs (default 60)")
@@ -130,6 +135,14 @@ def main():
         from image_dataset_to_csv import extract_landmarks_from_images
         extract_landmarks_from_images(
             root=args.images_root,
+            max_per_class=args.max_per_class,
+        )
+    elif args.from_hagrid_json:
+        if not args.json_dir:
+            parser.error("--from-hagrid-json requires --json-dir PATH")
+        from hagrid_json_to_csv import extract_landmarks_from_json
+        extract_landmarks_from_json(
+            json_dir=args.json_dir,
             max_per_class=args.max_per_class,
         )
     else:
