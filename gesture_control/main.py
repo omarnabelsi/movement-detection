@@ -1,9 +1,10 @@
 """Hand Gesture Computer Control — main entry point.
 
 Modes:
-    python main.py            → real-time gesture control
-    python main.py --record   → open dataset recorder
-    python main.py --train    → train the gesture classifier
+    python main.py                                     → real-time gesture control
+    python main.py --record                            → open dataset recorder
+    python main.py --from-images --images-root PATH    → extract landmarks from image dataset
+    python main.py --train                             → train the gesture classifier
 
 Press ESC to exit any mode cleanly.
 """
@@ -103,6 +104,12 @@ def main():
                        help="Open the dataset recorder")
     group.add_argument("--train", action="store_true",
                        help="Train the gesture classifier")
+    group.add_argument("--from-images", action="store_true",
+                       help="Extract landmarks from a HaGRID image dataset")
+    parser.add_argument("--images-root", default=None,
+                        help="HaGRID root folder (required with --from-images)")
+    parser.add_argument("--max-per-class", type=int, default=400,
+                        help="Max images per gesture class when using --from-images (default 400)")
     parser.add_argument("--epochs", type=int, default=60,
                         help="Training epochs (default 60)")
     parser.add_argument("--lr", type=float, default=1e-3,
@@ -117,6 +124,14 @@ def main():
     elif args.train:
         from train_model import train
         train(epochs=args.epochs, lr=args.lr, batch_size=args.batch)
+    elif args.from_images:
+        if not args.images_root:
+            parser.error("--from-images requires --images-root PATH")
+        from image_dataset_to_csv import extract_landmarks_from_images
+        extract_landmarks_from_images(
+            root=args.images_root,
+            max_per_class=args.max_per_class,
+        )
     else:
         run_inference()
 
